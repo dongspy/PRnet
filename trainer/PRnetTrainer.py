@@ -355,7 +355,10 @@ class PRnetTrainer:
                 self.patient = 0
                 print("Saving best state of network...")
                 print("Best State was in Epoch", self.epoch)
-                self.best_state_dictG = self.modelPGM.module.state_dict()
+                if(torch.cuda.device_count() > 1):
+                    self.best_state_dictG = self.modelPGM.module.state_dict()
+                else:
+                    self.best_state_dictG = self.modelPGM.state_dict()
                 torch.save(self.best_state_dictG, self.model_save_dir+self.split_key+'_best_epoch_all.pt')
                 self.best_mse = self.mse_score[-1]
             elif self.patient <= 20:
